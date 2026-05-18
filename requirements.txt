@@ -1,0 +1,10 @@
+gradio>=4.44
+requests>=2.31
+python-dotenv>=1.0
+plotly>=5.22
+folium>=0.16
+fpdf2>=2.7
+diskcache>=5.6
+earthengine-api>=0.1.400
+openai-whisper>=20231117
+pyttsx3>=2.90
