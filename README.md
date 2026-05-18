@@ -1,118 +1,93 @@
-***
+# 🌍 VillageForge AI (v3.0)
+**Multimodal, Agentic, Open-Data Infrastructure Planner for Social Good**
 
-# 🏗️ VillageForge AI v3
-### *Agentic, Multimodal, Open-Data Infrastructure Planner for Rural Resilience*
+VillageForge AI is an intelligent planning assistant designed to help NGOs, governments, and rural developers plan critical infrastructure (like schools, hospitals, and solar microgrids) in remote or underserved areas. 
 
-**VillageForge AI** is a complete, agentic infrastructure planning suite. It enables anyone—from field workers to government officials—to generate expert-level, climate-resilient construction plans for schools, clinics, and utilities using only open-source data.
-
----
-
-## 🎙️ Multimodal & Multilingual Voice Features
-One of the most powerful features of VillageForge is its **Multimodal Interface**, designed for accessibility in areas where typing or English proficiency might be a barrier.
-
-*   **Multilingual Voice Input (Audio-In):**
-    *   **How it works:** Uses the **OpenAI Whisper** model locally.
-    *   **Translation:** You can speak in your native language (e.g., Hindi, Swahili, Spanish, etc.), and the system automatically transcribes and translates your intent into English planning instructions.
-    *   **Intent Extraction:** The AI extracts the **Location**, **Project Type**, and **Budget** directly from your spoken words.
-*   **Local Voice Output (Audio-Out):**
-    *   **How it works:** Uses a local, offline **Text-to-Speech (TTS)** engine (`pyttsx3`).
-    *   **Accessibility:** Once a plan is generated, the AI creates a spoken summary of the project. This allows non-technical stakeholders to "hear" the project viability and risks without reading a 20-page report.
-    *   **Zero-Cloud:** The voice generation happens entirely on your machine—no data is sent to private cloud TTS providers.
+Instead of relying on guesswork, VillageForge aggregates open-source satellite data, global health databases, and climate models, then uses a panel of AI agents to debate and design a highly resilient, data-driven project plan.
 
 ---
 
-## 🧠 The "Agentic" Planning Engine
-VillageForge doesn't just "guess"; it simulates a professional boardroom through a **Multi-Agent Debate**:
+## 🧠 How It Works (In Simple Terms)
 
-1.  **The Architect (Lead):** Drafts the initial structure and budget.
-2.  **The Structural Engineer:** Critiques the plan for earthquake, flood, and soil bearing safety.
-3.  **The Climate Scientist:** Stress-tests the design against the year 2050 heatwaves and chronic drought.
-4.  **The Social Impact Advocate:** Ensures the design is inclusive for women, children, and the elderly.
-5.  **The Budget Auditor:** Strips away waste and ensures the project is financially realistic.
-
-**Result:** The final plan is a "Consensus" document that has been cross-checked by 5 different AI perspectives.
+1. **You make a request:** You can type your request or speak into your microphone in **any language**. Tell the AI what you want to build, where (e.g., a pincode or village name), and your budget.
+2. **The AI gathers data:** The engine reaches out to free, public databases (NASA, Google Earth Engine, OpenStreetMap, World Bank, etc.) to check the location's flood risk, solar potential, population density, road access, and more.
+3. **The AI Agents debate:** Behind the scenes, different AI "personas" look at the data. A strict *Structural Engineer* checks for earthquake and flood risks. A *Social Advocate* checks if the clinic is too far for the elderly. A *Climate Scientist* checks 2050 heatwave projections. They argue and fix the plan until it's safe.
+4. **You get a complete report:** The app generates a 3D risk map, a 5-year satellite timelapse, a budget breakdown, an interactive timeline, and a downloadable PDF report. 
+5. **Chat & Listen:** You can chat directly with your generated plan to ask specific questions, or click a button to hear the summary read out loud in your local language!
 
 ---
 
-## 🚀 Installation & Command Guide
+## ✨ Key Features
+- **🎙️ Multilingual Voice Input:** Speak in Hindi, Spanish, Swahili, etc. The AI translates it to English instantly using OpenAI's Whisper.
+- **🛰️ Satellite & Open Data:** Pulls real-time data for topography, weather, soil quality, and air pollution without requiring paid API keys.
+- **🤖 Multi-Agent Debate:** Plans are stress-tested by AI personas to ensure safety and budget efficiency.
+- **🗺️ Interactive 3D & 2D Mapping:** Visualize flood risks, population clusters, and local terrain in your browser.
+- **💬 Plan Chatbot & Audio:** Talk to your infrastructure plan or have it read out loud in multiple languages using `gTTS`.
+- **📄 Auto-Generated PDFs:** Instantly export professional, boardroom-ready reports.
 
-Run these commands to ensure every feature (maps, 3D, PDF, Voice, AI) works perfectly.
+---
 
-### 1. Core System Upgrade
+## 📂 File Structure
+
+The application is split into two clean files:
+* `app.py`: **The Frontend.** This builds the beautiful Gradio user interface, handles the microphone input, renders the charts/maps, and manages the chat and audio interfaces.
+* `village_engine.py`: **The Brains.** This handles all the heavy lifting. It talks to the AI models (Gemma), fetches data from satellites, runs the multi-agent debates, formats the PDFs, and calculates composite scores.
+
+---
+
+## 🛠️ Installation & Setup
+
+### 1. Prerequisites
+* **Python 3.10+** installed on your system.
+* **Ollama:** You need to have [Ollama](https://ollama.com/) installed to run the local LLM. 
+  * Open your terminal and run: `ollama run gemma:2b` (or whichever model you prefer) to download the AI brain.
+* **Google Earth Engine (Optional but highly recommended):** For satellite data, you need an Earth Engine account. 
+
+### 2. Install Python Dependencies
+Open your terminal/command prompt, navigate to your project folder, and run the following command to install the required libraries:
+
 ```bash
-# Vital to avoid dependency conflicts with Gradio and Typer
+pip install gradio earthengine-api plotly folium fpdf diskcache openai-whisper pyttsx3 gTTS requests python-dotenv
+```
+
+### 3. Fix Dependency Conflicts (Crucial Step)
+Gradio relies on specific background libraries (`click` and `typer`). To prevent the app from crashing on startup with a `TypeError: type 'Choice' is not subscriptable` error, run this upgrade command:
+
+```bash
 pip install --upgrade click typer
 ```
 
-### 2. Full Feature Installation
+### 4. Authenticate Earth Engine (If using satellite features)
+Run this command in your terminal and follow the instructions in your browser to link your Google account:
 ```bash
-# UI and Visuals
-pip install gradio plotly folium fpdf requests
-
-# AI Brain & Local Model Support
-pip install torch transformers bitsandbytes accelerate
-
-# Data Science & Satellite Processing
-pip install earthengine-api diskcache python-dotenv math re
-
-# Multilingual Voice (Audio-In & Audio-Out)
-pip install openai-whisper pyttsx3
+earthengine authenticate
 ```
 
 ---
 
-## 🛠️ Feature Breakdown
+## 🚀 Running the Application
 
-### 📊 Professional Planning Tools
-*   **Budget & Timeline:** Automatic breakdown of costs with a "Gantt-style" timeline of construction phases.
-*   **SDG Impact Calculator:** Specifically maps the project to **United Nations Sustainable Development Goals** and calculates the "Cost per Beneficiary."
-*   **Beneficiary Personas:** Generates realistic, data-driven "Human Profiles" of people who will use the facility (e.g., a local teacher or a mother of three).
-*   **Plan Diffing:** If you change a location or budget, the AI runs a "Semantic Diff" to show you exactly how the strategy changed between Version A and Version B.
+Once everything is installed, simply run:
 
-### 🌍 Satellite & Environmental Intelligence
-*   **3D Site Visualization:** A high-tech `deck.gl` 3D view that turns flood and seismic risks into a "heat-map" landscape.
-*   **Sentinel-2 Timelapse:** (Requires Earth Engine) Watch 5 years of historical land changes at the site to check for erosion or urban growth.
-*   **Live Site Alerts:** Connects to Open-Meteo and NASA FIRMS to give you real-time weather and fire alerts for the chosen coordinates.
-*   **2050 Climate Stress Test:** Modeled projections of how much hotter/drier the site will be in 30 years.
+```bash
+python app.py
+```
 
-### 📄 Exportable Artifacts
-*   **PDF Reports:** A fully formatted, multi-page professional engineering report ready for printing.
-*   **Interactive HTML Maps:** Folium-based maps showing nearby hospitals, schools, and roads.
-*   **JSON Data:** Export the raw data to integrate with other government GIS systems.
+* You will see a link appear in your terminal (usually `http://127.0.0.1:7860` or `http://0.0.0.0:7860`). 
+* `CTRL + Click` that link to open VillageForge AI in your web browser!
 
 ---
 
-## 📂 How to Run
-
-### On Local Machine:
-1.  Open your terminal.
-2.  Run `python app.py`.
-3.  Open `http://localhost:7860`.
-
-### On Kaggle:
-1.  Enable **GPU T4 x2** in Settings.
-2.  Paste the code into a cell.
-3.  Run the cell and wait for the **Gradio Public URL** (`xxxx.gradio.live`).
-4.  **Note:** The first run takes ~2 minutes to load the 2B/4B Gemma model into the GPU memory.
+## 💡 Advanced Options (v3 Features)
+When filling out the text form, you can open the **⚙️ Advanced Options** accordion to toggle:
+* **Run Multi-Agent Debate:** Let the AI personas critique the plan (takes slightly longer, but yields much safer plans).
+* **Generate Satellite Timelapse:** Creates a 5-year historical GIF of the site (adds ~30-60 seconds to processing time).
+* **Beneficiary Personas & Tool Selection:** Uses the LLM to generate realistic human personas and dynamically choose which APIs to query based on your project type.
 
 ---
 
-## 📡 The Open Data "Sources"
-VillageForge is powered by the world's most reliable open data:
-*   **Infrastructure:** OpenStreetMap (OSM)
-*   **Climate/Weather:** NASA POWER & Open-Meteo
-*   **Health:** WHO Global Health Observatory
-*   **Economy:** World Bank API
-*   **Agriculture:** FAOSTAT
-*   **Disasters:** ReliefWeb & USGS
-*   **Satellite Imagery:** European Space Agency (ESA) & Copernicus
-
----
-
-## 📛 Why "VillageForge AI"?
-**Village** represents our focus: the underserved, rural, and last-mile communities.  
-**Forge** represents the process: high-pressure, durable, and expert creation.  
-**AI** represents the engine: agentic, multimodal, and data-driven.
-
----
-*Created for the Social Impact AI Hackathon. Empowering the next billion through data-driven resilience.*
+## 🛡️ Defensive Programming & Open Data
+VillageForge AI is built to be robust. 
+* **No Paid APIs:** It strictly uses open/free public data sources.
+* **Graceful Degradation:** If Earth Engine is down, or a weather API fails, the app doesn't crash. It represents missing data as "Unknown" rather than faking a zero, and adapts the plan accordingly (e.g., "Flood risk data unavailable, defaulting to a conservative raised foundation"). 
+```
